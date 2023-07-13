@@ -1,11 +1,11 @@
-import {MongoClient} from 'mongodb';
+import {MongoClient, ObjectId} from 'mongodb';
 
 async function Handler(req, res){
 
     if(req.method === 'POST'){
         const data = req.body;
 
-        const client = await MongoClient.connect(  "mongodb+srv://afridmd001:mongodbUser2000@cluster0.rjwist1.mongodb.net/Todos?retryWrites=true&w=majority");
+        const client = await MongoClient.connect("mongodb+srv://afridmd001:mongodbUser2000@cluster0.rjwist1.mongodb.net/Todos?retryWrites=true&w=majority");
 
         const dataBase =  client.db();
         
@@ -17,6 +17,24 @@ async function Handler(req, res){
         client.close();
 
         res.status(201).json({message : 'New Todo added!'});
+    }
+
+    if(req.method === 'PUT'){
+        const data = req.body.name;
+        console.log(req.body);
+
+        const client = await MongoClient.connect("mongodb+srv://afridmd001:mongodbUser2000@cluster0.rjwist1.mongodb.net/Todos?retryWrites=true&w=majority");
+
+        const dataBase =  client.db();
+        
+        const todosCollections = dataBase.collection('Todos');
+
+        const result = await todosCollections.updateOne({data}, {$set :{status : 'complete'}});
+        console.log(result);
+
+        client.close();
+
+        res.status(201).json({message : 'Todo updated!'});
     }
 }
 export default Handler;
