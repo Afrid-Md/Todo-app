@@ -23,6 +23,27 @@ function ListOfTodo(props) {
     
   }
 
+  const deleteTodo=async(name)=>{
+    try{
+      const response = await fetch("/api/NewTodo",{
+        method:'DELETE',
+        body : JSON.stringify(name),
+        headers : {
+          'Content-Type' : 'application/json'
+        }
+      })
+
+      const data = await response.json();
+
+      if(response.ok){
+        console.log(data);
+      }
+    }catch(error){
+      alert('something went wrong!');
+    }
+    
+  }
+
   return (
     <div>
       <ul>
@@ -39,6 +60,7 @@ function ListOfTodo(props) {
                   <p>{todo.description}</p>
                 </div>
                 <button onClick={()=>markasDone(todo.name)}>Mark as done</button>
+                <button onClick={()=>deleteTodo(todo.name)}>Delete</button>
               </li>)
               }
             }

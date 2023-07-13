@@ -21,7 +21,7 @@ async function Handler(req, res){
 
     if(req.method === 'PUT'){
         const data = req.body.name;
-        console.log(req.body);
+       
 
         const client = await MongoClient.connect("mongodb+srv://afridmd001:mongodbUser2000@cluster0.rjwist1.mongodb.net/Todos?retryWrites=true&w=majority");
 
@@ -35,6 +35,23 @@ async function Handler(req, res){
         client.close();
 
         res.status(201).json({message : 'Todo updated!'});
+    }
+
+    if(req.method === 'DELETE'){
+        const data =req.body.name;
+
+        const client = await MongoClient.connect("mongodb+srv://afridmd001:mongodbUser2000@cluster0.rjwist1.mongodb.net/Todos?retryWrites=true&w=majority");
+
+        const dataBase =  client.db();
+        
+        const todosCollections = dataBase.collection('Todos');
+
+        const result = await todosCollections.deleteOne(data);
+        console.log(result);
+
+        client.close();
+
+        res.status(201).json({message : 'Todo deleted successfully!'});
     }
 }
 export default Handler;
